@@ -4,5 +4,5 @@ config_version: 3
 http:
   rules:
     - selector: cognitive.cognitive.Text2Speech
-      post: /genvoice/chat2voice
+      post: /cognitive/text2speech
       body: "*"
