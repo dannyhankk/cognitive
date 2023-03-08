@@ -1,0 +1,29 @@
+syntax = "proto3";
+
+option go_package="github.com/dannyhankk/cognitive";
+
+package cognitive;
+
+service Text2Speech {
+  rpc Chat2VoiceRequest(ChatRequest) returns (ChatResponse) {}
+}
+
+
+message ReqHead {
+  string id = 1;
+}
+
+message RspHead {
+  int32 code = 1;
+  string ms = 2;
+}
+
+message ChatRequest {
+  ReqHead head = 1;
+  string text = 2;
+}
+
+message  ChatResponse {
+  RspHead head = 1;
+  string url = 2;
+}
