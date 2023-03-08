@@ -3,6 +3,6 @@ config_version: 3
 
 http:
   rules:
-    - selector: cognitive.cognitive.Text2Speech
+    - selector: cognitive.Text2Speech.Chat2VoiceRequest
       post: /cognitive/text2speech
       body: "*"
