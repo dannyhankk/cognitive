@@ -15,10 +15,8 @@ var (
 )
 
 type ConfigRoot struct {
-	ApiKey   string `mapstructure:"apikey"`
-	Appid    string `mapstructure:"appid"`
-	RpcPort  int16  `mapstructure:"RpcPort"`
-	HttpPort int16  `mapstructure:"HttpPort"`
+	RpcPort  int16 `mapstructure:"RpcPort"`
+	HttpPort int16 `mapstructure:"HttpPort"`
 }
 
 func InitConfig(configFile string) error {
@@ -49,7 +47,6 @@ func ReadConfig() error {
 		return fmt.Errorf("read config error, %s", err.Error())
 	}
 
-	Logger.Infof("read config: %s, %d, %d",
-		RootConfig.ApiKey, RootConfig.RpcPort, RootConfig.HttpPort)
+	Logger.Infof("read config: %d, %d", RootConfig.RpcPort, RootConfig.HttpPort)
 	return nil
 }
