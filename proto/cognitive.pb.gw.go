@@ -138,7 +138,7 @@ func RegisterText2SpeechHandlerServer(ctx context.Context, mux *runtime.ServeMux
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
 		var err error
 		var annotatedContext context.Context
-		annotatedContext, err = runtime.AnnotateIncomingContext(ctx, mux, req, "/cognitive.Text2Speech/FetchVideoList", runtime.WithHTTPPathPattern("/cognitive.Text2Speech/FetchVideoList"))
+		annotatedContext, err = runtime.AnnotateIncomingContext(ctx, mux, req, "/cognitive.Text2Speech/FetchVideoList", runtime.WithHTTPPathPattern("/cognitive/videos"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -224,7 +224,7 @@ func RegisterText2SpeechHandlerClient(ctx context.Context, mux *runtime.ServeMux
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
 		var err error
 		var annotatedContext context.Context
-		annotatedContext, err = runtime.AnnotateContext(ctx, mux, req, "/cognitive.Text2Speech/FetchVideoList", runtime.WithHTTPPathPattern("/cognitive.Text2Speech/FetchVideoList"))
+		annotatedContext, err = runtime.AnnotateContext(ctx, mux, req, "/cognitive.Text2Speech/FetchVideoList", runtime.WithHTTPPathPattern("/cognitive/videos"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -246,7 +246,7 @@ func RegisterText2SpeechHandlerClient(ctx context.Context, mux *runtime.ServeMux
 var (
 	pattern_Text2Speech_Chat2VoiceRequest_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1}, []string{"cognitive", "text2speech"}, ""))
 
-	pattern_Text2Speech_FetchVideoList_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1}, []string{"cognitive.Text2Speech", "FetchVideoList"}, ""))
+	pattern_Text2Speech_FetchVideoList_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1}, []string{"cognitive", "videos"}, ""))
 )
 
 var (
