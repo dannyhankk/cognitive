@@ -16,6 +16,6 @@ func (s *MyServer) Chat2VoiceRequest(
 func (s *MyServer) FetchVideoList(
 	ctx context.Context, in *pb.FetchVideoRequest) (
 	out *pb.FetchVideoResponse, err error) {
-
-	return
+	handler := service.NewMyFetchVideos()
+	return handler.Fetch(ctx, in)
 }
