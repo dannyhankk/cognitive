@@ -23,6 +23,7 @@ const _ = grpc.SupportPackageIsVersion7
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type Text2SpeechClient interface {
 	Chat2VoiceRequest(ctx context.Context, in *ChatRequest, opts ...grpc.CallOption) (*ChatResponse, error)
+	FetchVideoList(ctx context.Context, in *FetchVideoRequest, opts ...grpc.CallOption) (*FetchVideoResponse, error)
 }
 
 type text2SpeechClient struct {
@@ -42,11 +43,21 @@ func (c *text2SpeechClient) Chat2VoiceRequest(ctx context.Context, in *ChatReque
 	return out, nil
 }
 
+func (c *text2SpeechClient) FetchVideoList(ctx context.Context, in *FetchVideoRequest, opts ...grpc.CallOption) (*FetchVideoResponse, error) {
+	out := new(FetchVideoResponse)
+	err := c.cc.Invoke(ctx, "/cognitive.Text2Speech/FetchVideoList", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // Text2SpeechServer is the server API for Text2Speech service.
 // All implementations must embed UnimplementedText2SpeechServer
 // for forward compatibility
 type Text2SpeechServer interface {
 	Chat2VoiceRequest(context.Context, *ChatRequest) (*ChatResponse, error)
+	FetchVideoList(context.Context, *FetchVideoRequest) (*FetchVideoResponse, error)
 	mustEmbedUnimplementedText2SpeechServer()
 }
 
@@ -56,6 +67,9 @@ type UnimplementedText2SpeechServer struct {
 
 func (UnimplementedText2SpeechServer) Chat2VoiceRequest(context.Context, *ChatRequest) (*ChatResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Chat2VoiceRequest not implemented")
+}
+func (UnimplementedText2SpeechServer) FetchVideoList(context.Context, *FetchVideoRequest) (*FetchVideoResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method FetchVideoList not implemented")
 }
 func (UnimplementedText2SpeechServer) mustEmbedUnimplementedText2SpeechServer() {}
 
@@ -88,6 +102,24 @@ func _Text2Speech_Chat2VoiceRequest_Handler(srv interface{}, ctx context.Context
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Text2Speech_FetchVideoList_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(FetchVideoRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(Text2SpeechServer).FetchVideoList(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/cognitive.Text2Speech/FetchVideoList",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(Text2SpeechServer).FetchVideoList(ctx, req.(*FetchVideoRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // Text2Speech_ServiceDesc is the grpc.ServiceDesc for Text2Speech service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -98,6 +130,10 @@ var Text2Speech_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "Chat2VoiceRequest",
 			Handler:    _Text2Speech_Chat2VoiceRequest_Handler,
+		},
+		{
+			MethodName: "FetchVideoList",
+			Handler:    _Text2Speech_FetchVideoList_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
