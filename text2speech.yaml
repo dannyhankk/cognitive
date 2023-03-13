@@ -1,8 +1,10 @@
 type: google.api.Service
 config_version: 3
-
 http:
   rules:
     - selector: cognitive.Text2Speech.Chat2VoiceRequest
       post: /cognitive/text2speech
+      body: "*"
+    - selector: cognitive.Text2Speech.FetchVideoList
+      post: /cognitive/videos
       body: "*"

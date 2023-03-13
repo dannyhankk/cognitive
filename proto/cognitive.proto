@@ -9,14 +9,13 @@ service Text2Speech {
   rpc FetchVideoList(FetchVideoRequest) returns(FetchVideoResponse){}
 }
 
-
 message ReqHead {
   string id = 1;
 }
 
 message RspHead {
   int32 code = 1;
-  string ms = 2;
+  string msg = 2;
 }
 
 message ChatRequest {
