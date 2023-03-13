@@ -1,9 +1,10 @@
-package cognitive
+package main
 
 import (
 	"context"
 	"flag"
 	"fmt"
+	"github.com/dannyhankk/cognitive/db"
 	. "github.com/dannyhankk/cognitive/proto"
 	"github.com/dannyhankk/cognitive/util"
 	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
@@ -69,5 +70,14 @@ func main() {
 
 func initAll() error {
 	flag.Parse()
+	if err := util.LogInit("./chat.log"); err != nil {
+		return fmt.Errorf("init loggger failed, %s", err.Error())
+	}
+	if err := util.InitConfig(*ConfigFile); err != nil {
+		return fmt.Errorf("init config failed, %s", err.Error())
+	}
+	if err := db.InitRedis(); err != nil {
+		return fmt.Errorf("init redis failed, %s", err.Error())
+	}
 	return nil
 }
