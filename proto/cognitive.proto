@@ -34,7 +34,7 @@ message FetchVideoRequest {
 }
 
 message Video {
-  string url = 1;
+  string src = 1;
   string title = 2;
   string author = 3;
 }

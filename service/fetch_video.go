@@ -21,12 +21,12 @@ func (c *MyFetchVideos) Fetch(ctx context.Context,
 	res := &pb.FetchVideoResponse{}
 	res.VideoList = []*pb.Video{
 		{
-			Url:    "https://m.dannyhkk.cn/englishpod_D0091dg.mp3",
+			Src:    "https://m.dannyhkk.cn/englishpod_D0091dg.mp3",
 			Author: "Kevin",
 			Title:  "englishpod_dg_91",
 		},
 		{
-			Url:    "https://m.dannyhkk.cn/englishpod_D0091dg.mp3",
+			Src:    "https://m.dannyhkk.cn/englishpod_D0091dg.mp3",
 			Author: "Kevin",
 			Title:  "englishpod_dg_90",
 		},
