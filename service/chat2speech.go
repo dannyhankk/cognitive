@@ -20,6 +20,11 @@ func (c *MyChat2Speech) TransSpeech(ctx context.Context, in *pb.ChatRequest) (
 	*pb.ChatResponse, error) {
 
 	res := &pb.ChatResponse{}
+	res.VideoItem = &pb.Video{
+		Src:    "https://m.dannyhkk.cn/englishpod_D0091dg.mp3",
+		Author: "Kevin",
+		Title:  "englishpod_dg_89",
+	}
 	return c.doResponse(res)
 }
 
