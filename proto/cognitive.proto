@@ -25,7 +25,7 @@ message ChatRequest {
 
 message  ChatResponse {
   RspHead head = 1;
-  string url = 2;
+  Video video_item = 2;
 }
 
 message FetchVideoRequest {
