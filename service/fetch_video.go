@@ -32,6 +32,9 @@ func (c *MyFetchVideos) Fetch(ctx context.Context,
 		if info.IsDir() {
 			return nil
 		}
+		if info.Size() == 0 {
+			return nil
+		}
 		files = append(files, info.Name())
 		return nil
 	})
@@ -57,5 +60,10 @@ func (c *MyFetchVideos) doResponse(res *pb.FetchVideoResponse) (*pb.FetchVideoRe
 }
 
 func (c *MyFetchVideos) doResponseExp(code int32, msg string, res *pb.FetchVideoResponse) (*pb.FetchVideoResponse, error) {
+	res.Head = &pb.RspHead{
+		Code: code,
+		Msg:  msg,
+	}
+	res.VideoList = []*pb.Video{}
 	return res, nil
 }

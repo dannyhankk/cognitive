@@ -1,6 +1,7 @@
 package client
 
 import (
+	"fmt"
 	"github.com/Microsoft/cognitive-services-speech-sdk-go/common"
 	"github.com/dannyhankk/cognitive/util"
 	"os"
@@ -14,7 +15,7 @@ import (
 )
 
 const (
-	ssmlHeaderStart = "speak xmlns=\"http://www.w3.org/2001/10/synthesis\" " +
+	ssmlHeaderStart = "<speak xmlns=\"http://www.w3.org/2001/10/synthesis\" " +
 		"xmlns:mstts=\"http://www.w3.org/2001/mstts\" xmlns:emo=\"http://www.w3.org/2009/10/emotionml\" " +
 		"version=\"1.0\" xml:lang=\""
 	ssmlHeaderEnd = "\">"
@@ -165,11 +166,13 @@ func CreateVoice(text string, lang pb.LangType, file string) {
 	select {
 	case outcome = <-task:
 	case <-time.After(60 * time.Second):
+		err = fmt.Errorf("time out")
 		util.Logger.Errorf("generate time out")
 		return
 	}
 	defer outcome.Close()
 	if outcome.Error != nil {
+		err = outcome.Error
 		util.Logger.Errorf("generate error, %s", outcome.Error.Error())
 		return
 	}
