@@ -6,6 +6,7 @@ import (
 	pb "github.com/dannyhankk/cognitive/proto"
 	"github.com/dannyhankk/cognitive/util"
 	"os"
+	"strings"
 )
 
 const (
@@ -35,8 +36,10 @@ func (c *MyChat2Speech) TransSpeech(ctx context.Context, in *pb.ChatRequest) (
 		err = os.Mkdir(filedir, os.ModePerm)
 		util.Logger.Infof("make dir : %v", err)
 	}
+	fileName := in.Text[16:32] + ".wav"
+	fileName = strings.ReplaceAll(fileName, " ", "_")
 	go func() {
-		client.CreateVoice(in.Text, in.Lang, filedir+"/"+in.Text[16:32]+".wav")
+		client.CreateVoice(in.Text, in.Lang, filedir+"/"+fileName)
 	}()
 
 	return c.doResponse(res)

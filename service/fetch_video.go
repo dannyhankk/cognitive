@@ -44,7 +44,7 @@ func (c *MyFetchVideos) Fetch(ctx context.Context,
 	res.VideoList = []*pb.Video{}
 	for _, file := range files {
 		res.VideoList = append(res.VideoList, &pb.Video{
-			Src:    http_default + in.Head.Id + "/" + file,
+			Src:    http_default + "/" + in.Head.Id + "/" + file,
 			Author: "Kevin",
 			Title:  file[0 : len(file)-4],
 		})
