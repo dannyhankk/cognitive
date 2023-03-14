@@ -19,3 +19,10 @@ func (s *MyServer) FetchVideoList(
 	handler := service.NewMyFetchVideos()
 	return handler.Fetch(ctx, in)
 }
+
+func (s *MyServer) ResetGenVoice(
+	ctx context.Context, in *pb.ResetVoiceGenRequest) (
+	out *pb.ResetVoiceGenResponse, err error) {
+	handler := service.NewMyResetGenVoice()
+	return handler.Reset(ctx, in)
+}

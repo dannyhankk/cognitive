@@ -65,7 +65,7 @@ func saveVoiceGen(id string, info *userGenInfo) {
 	}
 	db.Save(key, string(data))
 }
-func resetVoiceGen(id string) error {
+func ResetVoiceGen(id string) error {
 	key := id + "_voice"
 	result, err := db.Get(key)
 	if err == redis.Nil {
