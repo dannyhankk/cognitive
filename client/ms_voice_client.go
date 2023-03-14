@@ -95,7 +95,7 @@ func getVoiceName(lang pb.LangType, isMale bool) string {
 		if isMale {
 			return "ko-KR-InJoonNeural"
 		}
-		return "ko-KR-SoonBokNeural"
+		return "ko-KR-SunHiNeural"
 	case pb.LangType_ARABIC:
 		if isMale {
 			return "ar-SA-HamedNeural"
