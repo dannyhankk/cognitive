@@ -49,6 +49,8 @@ func ReadConfig() error {
 		return fmt.Errorf("read config error, %s", err.Error())
 	}
 
-	Logger.Infof("read config: %d, %d", RootConfig.RpcPort, RootConfig.HttpPort)
+	Logger.Infof("read config: %d, %d, %s, %s",
+		RootConfig.RpcPort, RootConfig.HttpPort,
+		RootConfig.SpeechRegion, RootConfig.SpeechKey)
 	return nil
 }

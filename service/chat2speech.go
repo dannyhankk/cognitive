@@ -36,7 +36,7 @@ func (c *MyChat2Speech) TransSpeech(ctx context.Context, in *pb.ChatRequest) (
 		util.Logger.Infof("make dir : %v", err)
 	}
 	go func() {
-		client.CreateVoice(in.Text, in.Lang, filedir+"/"+in.Text[6:32]+".wav")
+		client.CreateVoice(in.Text, in.Lang, filedir+"/"+in.Text[16:32]+".wav")
 	}()
 
 	return c.doResponse(res)
