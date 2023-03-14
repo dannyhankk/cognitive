@@ -1,8 +1,9 @@
 {
-  "SpeechKey":"cc694d957b024313aa3a9736166fb42e",
+  "SpeechKey":"02ccad6a9f8f471a915474e2789f2a7a",
   "SpeechRegion":"eastasia",
   "RpcPort": 9003,
-  "HttpPort": 9002
+  "HttpPort": 9002,
+  "VoiceGenLimit":2
 }
 
 
