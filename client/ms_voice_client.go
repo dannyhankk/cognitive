@@ -3,6 +3,7 @@ package client
 import (
 	"github.com/Microsoft/cognitive-services-speech-sdk-go/common"
 	"github.com/dannyhankk/cognitive/util"
+	"os"
 	"time"
 
 	pb "github.com/dannyhankk/cognitive/proto"
@@ -126,6 +127,14 @@ func getLang(lang pb.LangType) string {
 }
 
 func CreateVoice(text string, lang pb.LangType, file string) {
+	var err error
+	err = nil
+	defer func(err error) {
+		if err != nil {
+			util.Logger.Errorf("voice gen error, remove file")
+			os.Remove(file)
+		}
+	}(err)
 	audioConfig, err := audio.NewAudioConfigFromWavFileOutput(file)
 	if err != nil {
 		util.Logger.Errorf("init audio config error, %s", err.Error())
