@@ -1,7 +1,6 @@
 package client
 
 import (
-	"fmt"
 	"github.com/Microsoft/cognitive-services-speech-sdk-go/common"
 	"github.com/dannyhankk/cognitive/util"
 	"time"
@@ -34,17 +33,18 @@ func transText2SSML(text string, lang pb.LangType) (string, error) {
 	first := strings.Split(text, "Male:")
 	for _, firstItem := range first {
 		partSecond := strings.Split(firstItem, "Female")
-		if len(partSecond) != 2 {
-			return "", fmt.Errorf("handle gen voice failed")
-		}
-		if partSecond[0] != "" {
-			ssml += ssmlVoiceHeaderStart
-			ssml += getVoiceName(lang, true)
-			ssml += ssmlVoiceHeaderEnd
-			ssml += partSecond[0]
-			ssml += ssmlVoiceEnd
-		}
-		if partSecond[1] != "" {
+		for index, _ := range partSecond {
+			if partSecond[index] == "" {
+				continue
+			}
+			if index == 0 {
+				ssml += ssmlVoiceHeaderStart
+				ssml += getVoiceName(lang, true)
+				ssml += ssmlVoiceHeaderEnd
+				ssml += partSecond[0]
+				ssml += ssmlVoiceEnd
+				continue
+			}
 			ssml += ssmlVoiceHeaderStart
 			ssml += getVoiceName(lang, false)
 			ssml += ssmlVoiceHeaderEnd
