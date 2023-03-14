@@ -15,8 +15,10 @@ var (
 )
 
 type ConfigRoot struct {
-	RpcPort  int16 `mapstructure:"RpcPort"`
-	HttpPort int16 `mapstructure:"HttpPort"`
+	SpeechKey    string `mapstructure:"SpeechKey"`
+	SpeechRegion string `mapstructure:"SpeechRegion"`
+	RpcPort      int16  `mapstructure:"RpcPort"`
+	HttpPort     int16  `mapstructure:"HttpPort"`
 }
 
 func InitConfig(configFile string) error {

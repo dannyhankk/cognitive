@@ -18,6 +18,17 @@ message RspHead {
   string msg = 2;
 }
 
+enum LangType {
+  ENGLISH = 0;
+  RUSSIA = 1;
+  FRENCH = 2;
+  SPANISH = 3;
+  PORTUGAL = 4;
+  JAPANESE = 5;
+  KOREAN = 6;
+  ARABIC = 7;
+}
+
 message ChatRequest {
   ReqHead head = 1;
   string text = 2;
