@@ -39,7 +39,7 @@ func (c *MyChat2Speech) TransSpeech(ctx context.Context, in *pb.ChatRequest) (
 	fileName := in.Text[16:32] + ".wav"
 	fileName = strings.ReplaceAll(fileName, " ", "_")
 	go func() {
-		client.CreateVoice(in.Text, in.Lang, filedir+"/"+fileName)
+		client.CreateVoice(in.Text, pb.LangType(in.Lang), filedir+"/"+fileName)
 	}()
 
 	return c.doResponse(res)
