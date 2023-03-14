@@ -36,7 +36,7 @@ func (c *MyChat2Speech) TransSpeech(ctx context.Context, in *pb.ChatRequest) (
 		err = os.Mkdir(filedir, os.ModePerm)
 		util.Logger.Infof("make dir : %v", err)
 	}
-	fileName := in.Text[16:32] + ".wav"
+	fileName := in.Title + ".wav"
 	fileName = strings.ReplaceAll(fileName, " ", "_")
 	go func() {
 		client.CreateVoice(in.Text, pb.LangType(in.Lang), filedir+"/"+fileName)
