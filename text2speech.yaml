@@ -8,3 +8,6 @@ http:
     - selector: cognitive.Text2Speech.FetchVideoList
       post: /cognitive/videos
       body: "*"
+    - selector: cognitive.Text2Speech.ResetGenVoice
+      post: /cognitive/resetvoice
+      body: "*"
