@@ -2,8 +2,15 @@ package client
 
 import (
 	"fmt"
+	"github.com/Microsoft/cognitive-services-speech-sdk-go/common"
+	"github.com/dannyhankk/cognitive/util"
+	"time"
+
 	pb "github.com/dannyhankk/cognitive/proto"
 	"strings"
+
+	"github.com/Microsoft/cognitive-services-speech-sdk-go/audio"
+	"github.com/Microsoft/cognitive-services-speech-sdk-go/speech"
 )
 
 const (
@@ -116,4 +123,58 @@ func getLang(lang pb.LangType) string {
 		return "ar-SA"
 	}
 	return "en-US"
+}
+
+func CreateVoice(text string, lang pb.LangType, file string) {
+	audioConfig, err := audio.NewAudioConfigFromWavFileOutput(file)
+	if err != nil {
+		util.Logger.Errorf("init audio config error, %s", err.Error())
+		return
+	}
+	defer audioConfig.Close()
+	speechConfig, err := speech.NewSpeechConfigFromSubscription(
+		util.RootConfig.SpeechKey, util.RootConfig.SpeechRegion)
+	if err != nil {
+		util.Logger.Errorf("init speech config error, %s", err.Error())
+		return
+	}
+	defer speechConfig.Close()
+	speechSynthesizer, err := speech.NewSpeechSynthesizerFromConfig(speechConfig, audioConfig)
+	if err != nil {
+		util.Logger.Errorf("init speech synthesizer config error, %s", err.Error())
+		return
+	}
+	defer speechSynthesizer.Close()
+	ssmlString, err := transText2SSML(text, lang)
+	if err != nil {
+		util.Logger.Errorf("format ssml failed, %s", err.Error())
+		return
+	}
+
+	task := speechSynthesizer.SpeakSsmlAsync(ssmlString)
+	var outcome speech.SpeechSynthesisOutcome
+	select {
+	case outcome = <-task:
+	case <-time.After(60 * time.Second):
+		util.Logger.Errorf("generate time out")
+		return
+	}
+	defer outcome.Close()
+	if outcome.Error != nil {
+		util.Logger.Errorf("generate error, %s", outcome.Error.Error())
+		return
+	}
+
+	if outcome.Result.Reason == common.SynthesizingAudioCompleted {
+		util.Logger.Infof("Speech synthesized to speaker for text\n")
+	} else {
+		cancellation, _ := speech.NewCancellationDetailsFromSpeechSynthesisResult(outcome.Result)
+		util.Logger.Infof("CANCELED: Reason=%d.\n", cancellation.Reason)
+
+		if cancellation.Reason == common.Error {
+			util.Logger.Infof("CANCELED: ErrorCode=%d\nCANCELED: ErrorDetails=[%s]\nCANCELED: Did you set the speech resource key and region values?\n",
+				cancellation.ErrorCode,
+				cancellation.ErrorDetails)
+		}
+	}
 }

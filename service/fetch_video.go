@@ -2,7 +2,10 @@ package service
 
 import (
 	"context"
+	"fmt"
 	pb "github.com/dannyhankk/cognitive/proto"
+	"os"
+	"path/filepath"
 )
 
 type FetchVideos interface {
@@ -19,17 +22,23 @@ func NewMyFetchVideos() FetchVideos {
 func (c *MyFetchVideos) Fetch(ctx context.Context,
 	in *pb.FetchVideoRequest) (*pb.FetchVideoResponse, error) {
 	res := &pb.FetchVideoResponse{}
-	res.VideoList = []*pb.Video{
-		{
-			Src:    "https://m.dannyhkk.cn/englishpod_D0091dg.mp3",
+
+	var files []string
+	root := default_path + "/" + in.Head.Id
+	err := filepath.Walk(root, func(path string, info os.FileInfo, err error) error {
+		files = append(files, path)
+		return nil
+	})
+	if err != nil {
+		return c.doResponseExp(-1, fmt.Sprintf("scan user files error, %s", err.Error()), res)
+	}
+	res.VideoList = []*pb.Video{}
+	for _, file := range files {
+		res.VideoList = append(res.VideoList, &pb.Video{
+			Src:    http_default + in.Head.Id + "/" + file,
 			Author: "Kevin",
-			Title:  "englishpod_dg_91",
-		},
-		{
-			Src:    "https://m.dannyhkk.cn/englishpod_D0091dg.mp3",
-			Author: "Kevin",
-			Title:  "englishpod_dg_90",
-		},
+			Title:  file[0 : len(file)-4],
+		})
 	}
 	return c.doResponse(res)
 }
@@ -42,5 +51,5 @@ func (c *MyFetchVideos) doResponse(res *pb.FetchVideoResponse) (*pb.FetchVideoRe
 }
 
 func (c *MyFetchVideos) doResponseExp(code int32, msg string, res *pb.FetchVideoResponse) (*pb.FetchVideoResponse, error) {
-	return nil, nil
+	return res, nil
 }

@@ -1,4 +1,6 @@
 {
+  "SpeechKey":"cc694d957b024313aa3a9736166fb42e",
+  "SpeechRegion":"eastasia",
   "RpcPort": 9003,
   "HttpPort": 9002
 }

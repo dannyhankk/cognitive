@@ -9,6 +9,7 @@ require (
 )
 
 require (
+	github.com/Microsoft/cognitive-services-speech-sdk-go v1.26.0 // indirect
 	github.com/fsnotify/fsnotify v1.6.0 // indirect
 	github.com/go-redis/redis v6.15.9+incompatible // indirect
 	github.com/golang/protobuf v1.5.2 // indirect
