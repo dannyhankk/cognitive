@@ -7,6 +7,7 @@ package cognitive;
 service Text2Speech {
   rpc Chat2VoiceRequest(ChatRequest) returns (ChatResponse) {}
   rpc FetchVideoList(FetchVideoRequest) returns(FetchVideoResponse){}
+  rpc ResetGenVoice(ResetVoiceGenRequest) returns(ResetVoiceGenResponse){}
 }
 
 message ReqHead {
@@ -55,4 +56,12 @@ message Video {
 message FetchVideoResponse {
   RspHead head = 1;
   repeated Video videoList = 2;
+}
+
+message ResetVoiceGenRequest {
+  ReqHead head = 1;
+}
+
+message ResetVoiceGenResponse {
+  RspHead head = 1;
 }

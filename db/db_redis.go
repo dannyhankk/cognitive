@@ -21,15 +21,15 @@ func InitRedis() (err error) {
 }
 
 func Save(key string, value string) error {
-	res, err := redisdb.LPush(key, value, 0).Result()
+	res, err := redisdb.Set(key, value, 0).Result()
 	if err != nil {
 		return fmt.Errorf("save error, %s, %s", err.Error(), res)
 	}
 	return nil
 }
 
-func Get(key string) ([]string, error) {
-	return redisdb.LRange(key, 0, -1).Result()
+func Get(key string) (string, error) {
+	return redisdb.Get(key).Result()
 }
 
 func Del(key string) {
