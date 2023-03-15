@@ -11,3 +11,6 @@ http:
     - selector: cognitive.Text2Speech.ResetGenVoice
       post: /cognitive/resetvoice
       body: "*"
+    - selector: cognitive.Text2Speech.FetchVoiceText
+      post: /cognitive/fetchtext
+      body: "*"
