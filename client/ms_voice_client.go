@@ -127,7 +127,9 @@ func getLang(lang pb.LangType) string {
 	return "en-US"
 }
 
-func CreateVoice(text string, lang pb.LangType, file string) {
+type SuccessFunc func()
+
+func CreateVoice(text string, lang pb.LangType, file string, saveCallback SuccessFunc) {
 	var err error
 	err = nil
 	defer func(err error) {
@@ -180,6 +182,8 @@ func CreateVoice(text string, lang pb.LangType, file string) {
 	if outcome.Result.Reason == common.SynthesizingAudioCompleted {
 		util.Logger.Infof("Speech synthesized to speaker for text\n")
 		writeDownText(text, file)
+		saveCallback()
+
 	} else {
 		cancellation, _ := speech.NewCancellationDetailsFromSpeechSynthesisResult(outcome.Result)
 		util.Logger.Infof("CANCELED: Reason=%d.\n", cancellation.Reason)

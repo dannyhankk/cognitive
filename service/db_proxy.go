@@ -20,6 +20,10 @@ type userGenInfo struct {
 	ResetGenTime int64 `json:"reset_gen_time,omitempty"`
 }
 
+func GenVideoFileName(id string) string {
+	return fmt.Sprintf("%s-%d", id, time.Now().UnixMilli())
+}
+
 func checkUserGen(id string) (*userGenInfo, error) {
 	key := id + "_voice"
 	result, err := db.Get(key)

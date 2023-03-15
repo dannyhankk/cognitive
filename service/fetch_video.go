@@ -3,6 +3,7 @@ package service
 import (
 	"context"
 	"fmt"
+	"github.com/dannyhankk/cognitive/db"
 	pb "github.com/dannyhankk/cognitive/proto"
 	"os"
 	"path/filepath"
@@ -47,10 +48,12 @@ func (c *MyFetchVideos) Fetch(ctx context.Context,
 	}
 	res.VideoList = []*pb.Video{}
 	for _, file := range files {
+		fileNameWithOutEx := file[0 : len(file)-4]
+		title, _ := db.Get(fileNameWithOutEx)
 		res.VideoList = append(res.VideoList, &pb.Video{
 			Src:    http_default + "/" + in.Head.Id + "/" + file,
 			Author: "Kevin",
-			Title:  file[0 : len(file)-4],
+			Title:  title,
 		})
 	}
 	return c.doResponse(res)

@@ -3,10 +3,10 @@ package service
 import (
 	"context"
 	"github.com/dannyhankk/cognitive/client"
+	"github.com/dannyhankk/cognitive/db"
 	pb "github.com/dannyhankk/cognitive/proto"
 	"github.com/dannyhankk/cognitive/util"
 	"os"
-	"strings"
 	"time"
 )
 
@@ -43,18 +43,20 @@ func (c *MyChat2Speech) TransSpeech(ctx context.Context, in *pb.ChatRequest) (
 		return c.doResponseExp(-2, "user out limit", res)
 	}
 
-	filedir := default_path + "/" + in.Head.Id
-	if _, err := os.Stat(filedir); err != nil && os.IsNotExist(err) {
-		err = os.Mkdir(filedir, os.ModePerm)
+	fileDir := default_path + "/" + in.Head.Id
+	if _, err := os.Stat(fileDir); err != nil && os.IsNotExist(err) {
+		err = os.Mkdir(fileDir, os.ModePerm)
 		util.Logger.Infof("make dir : %v", err)
 	}
-	fileName := in.Title + ".wav"
-	fileName = strings.ReplaceAll(fileName, " ", "_")
+	fileName := GenVideoFileName(in.Head.Id)
 	go func() {
-		client.CreateVoice(in.Text, pb.LangType(in.Lang), filedir+"/"+fileName)
+		client.CreateVoice(in.Text, pb.LangType(in.Lang), fileDir+"/"+fileName+".wav", func() {
+			saveVoiceGen(in.Head.Id, userInfo)
+			db.Save(fileName, in.Title)
+		})
 	}()
 	userInfo.CurGenNum += 1
-	saveVoiceGen(in.Head.Id, userInfo)
+
 	return c.doResponse(res)
 }
 
