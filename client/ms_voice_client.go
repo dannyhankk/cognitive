@@ -179,6 +179,7 @@ func CreateVoice(text string, lang pb.LangType, file string) {
 
 	if outcome.Result.Reason == common.SynthesizingAudioCompleted {
 		util.Logger.Infof("Speech synthesized to speaker for text\n")
+		writeDownText(text, file)
 	} else {
 		cancellation, _ := speech.NewCancellationDetailsFromSpeechSynthesisResult(outcome.Result)
 		util.Logger.Infof("CANCELED: Reason=%d.\n", cancellation.Reason)
@@ -188,5 +189,13 @@ func CreateVoice(text string, lang pb.LangType, file string) {
 				cancellation.ErrorCode,
 				cancellation.ErrorDetails)
 		}
+	}
+}
+
+func writeDownText(text string, file string) {
+	textFileName := strings.ReplaceAll(file, "wav", "text")
+	err := os.WriteFile(textFileName, []byte(text), 0666)
+	if err != nil {
+		util.Logger.Errorf("write text to file failed, file: %s", textFileName)
 	}
 }

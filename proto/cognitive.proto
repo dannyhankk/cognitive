@@ -8,6 +8,7 @@ service Text2Speech {
   rpc Chat2VoiceRequest(ChatRequest) returns (ChatResponse) {}
   rpc FetchVideoList(FetchVideoRequest) returns(FetchVideoResponse){}
   rpc ResetGenVoice(ResetVoiceGenRequest) returns(ResetVoiceGenResponse){}
+  rpc FetchVoiceText(FetchVoiceTextRequest) returns (FetchVoiceTextResponse){}
 }
 
 message ReqHead {
@@ -64,4 +65,14 @@ message ResetVoiceGenRequest {
 
 message ResetVoiceGenResponse {
   RspHead head = 1;
+}
+
+message FetchVoiceTextRequest {
+  ReqHead head = 1;
+  string  file_url = 2;
+}
+
+message FetchVoiceTextResponse {
+  RspHead head = 1;
+  string text = 2;
 }
