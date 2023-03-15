@@ -26,3 +26,10 @@ func (s *MyServer) ResetGenVoice(
 	handler := service.NewMyResetGenVoice()
 	return handler.Reset(ctx, in)
 }
+
+func (s *MyServer) FetchVoiceText(
+	ctx context.Context, in *pb.FetchVoiceTextRequest) (
+	out *pb.FetchVoiceTextResponse, err error) {
+	handler := service.NewMyFetchVoiceText()
+	return handler.FetchText(ctx, in)
+}
