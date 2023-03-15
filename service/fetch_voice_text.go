@@ -30,7 +30,7 @@ func (c *MyFetchVoiceText) FetchText(ctx context.Context,
 		util.Logger.Errorf("FetchText request url empty")
 		return c.doResponseExp(-2, "request file url empty", res)
 	}
-	data, err := os.ReadFile(in.FileUrl)
+	data, err := os.ReadFile(default_path + "/" + in.Head.Id + "/" + in.FileUrl + ".text")
 	if err != nil {
 		util.Logger.Errorf("read file error, %s, %s", in.FileUrl, err.Error())
 		return c.doResponseExp(-2, "read file error", res)

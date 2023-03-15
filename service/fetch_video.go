@@ -6,6 +6,7 @@ import (
 	pb "github.com/dannyhankk/cognitive/proto"
 	"os"
 	"path/filepath"
+	"strings"
 )
 
 type FetchVideos interface {
@@ -33,6 +34,9 @@ func (c *MyFetchVideos) Fetch(ctx context.Context,
 			return nil
 		}
 		if info.Size() == 0 {
+			return nil
+		}
+		if !strings.Contains(info.Name(), "wav") {
 			return nil
 		}
 		files = append(files, info.Name())
