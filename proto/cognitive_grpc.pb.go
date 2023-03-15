@@ -25,6 +25,7 @@ type Text2SpeechClient interface {
 	Chat2VoiceRequest(ctx context.Context, in *ChatRequest, opts ...grpc.CallOption) (*ChatResponse, error)
 	FetchVideoList(ctx context.Context, in *FetchVideoRequest, opts ...grpc.CallOption) (*FetchVideoResponse, error)
 	ResetGenVoice(ctx context.Context, in *ResetVoiceGenRequest, opts ...grpc.CallOption) (*ResetVoiceGenResponse, error)
+	FetchVoiceText(ctx context.Context, in *FetchVoiceTextRequest, opts ...grpc.CallOption) (*FetchVoiceTextResponse, error)
 }
 
 type text2SpeechClient struct {
@@ -62,6 +63,15 @@ func (c *text2SpeechClient) ResetGenVoice(ctx context.Context, in *ResetVoiceGen
 	return out, nil
 }
 
+func (c *text2SpeechClient) FetchVoiceText(ctx context.Context, in *FetchVoiceTextRequest, opts ...grpc.CallOption) (*FetchVoiceTextResponse, error) {
+	out := new(FetchVoiceTextResponse)
+	err := c.cc.Invoke(ctx, "/cognitive.Text2Speech/FetchVoiceText", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // Text2SpeechServer is the server API for Text2Speech service.
 // All implementations must embed UnimplementedText2SpeechServer
 // for forward compatibility
@@ -69,6 +79,7 @@ type Text2SpeechServer interface {
 	Chat2VoiceRequest(context.Context, *ChatRequest) (*ChatResponse, error)
 	FetchVideoList(context.Context, *FetchVideoRequest) (*FetchVideoResponse, error)
 	ResetGenVoice(context.Context, *ResetVoiceGenRequest) (*ResetVoiceGenResponse, error)
+	FetchVoiceText(context.Context, *FetchVoiceTextRequest) (*FetchVoiceTextResponse, error)
 	mustEmbedUnimplementedText2SpeechServer()
 }
 
@@ -84,6 +95,9 @@ func (UnimplementedText2SpeechServer) FetchVideoList(context.Context, *FetchVide
 }
 func (UnimplementedText2SpeechServer) ResetGenVoice(context.Context, *ResetVoiceGenRequest) (*ResetVoiceGenResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ResetGenVoice not implemented")
+}
+func (UnimplementedText2SpeechServer) FetchVoiceText(context.Context, *FetchVoiceTextRequest) (*FetchVoiceTextResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method FetchVoiceText not implemented")
 }
 func (UnimplementedText2SpeechServer) mustEmbedUnimplementedText2SpeechServer() {}
 
@@ -152,6 +166,24 @@ func _Text2Speech_ResetGenVoice_Handler(srv interface{}, ctx context.Context, de
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Text2Speech_FetchVoiceText_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(FetchVoiceTextRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(Text2SpeechServer).FetchVoiceText(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/cognitive.Text2Speech/FetchVoiceText",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(Text2SpeechServer).FetchVoiceText(ctx, req.(*FetchVoiceTextRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // Text2Speech_ServiceDesc is the grpc.ServiceDesc for Text2Speech service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -170,6 +202,10 @@ var Text2Speech_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "ResetGenVoice",
 			Handler:    _Text2Speech_ResetGenVoice_Handler,
+		},
+		{
+			MethodName: "FetchVoiceText",
+			Handler:    _Text2Speech_FetchVoiceText_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
