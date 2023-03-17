@@ -27,11 +27,11 @@ type userGenInfo struct {
 }
 
 type storeAppInfo struct {
-	title    string `json:"title"`
-	describe string `json:"describe"`
-	prompt   string `json:"prompt"`
-	id       string `json:"id"`
-	creator  string `json:"creator"`
+	Title    string `json:"title"`
+	Describe string `json:"describe"`
+	Prompt   string `json:"prompt"`
+	Id       string `json:"id"`
+	Creator  string `json:"creator"`
 }
 type AppStore struct {
 	Apps map[string]*storeAppInfo `json:"apps"`
@@ -140,11 +140,11 @@ func AddApps(id string, app *pb.AppInfo) error {
 	}
 	appId := util.GenerateID(id)
 	newApp := &storeAppInfo{
-		title:    app.Title,
-		describe: app.Describe,
-		prompt:   app.Prompt,
-		id:       appId,
-		creator:  id,
+		Title:    app.Title,
+		Describe: app.Describe,
+		Prompt:   app.Prompt,
+		Id:       appId,
+		Creator:  id,
 	}
 	apps.Apps[appId] = newApp
 	storeString, err := json.Marshal(apps)
