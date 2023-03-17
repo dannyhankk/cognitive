@@ -40,7 +40,7 @@ func (c *MyLoadIcon) Load(ctx context.Context,
 		if !strings.Contains(info.Name(), "png") {
 			return nil
 		}
-		icons = append(icons, http_default+default_icon_path+info.Name())
+		icons = append(icons, http_default+default_icon_path+"/"+info.Name())
 		return nil
 	})
 	if err != nil {
