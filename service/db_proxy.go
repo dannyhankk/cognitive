@@ -175,7 +175,7 @@ func DeleteApps(id string, appId string) error {
 	if _, ok := apps.Apps[appId]; !ok {
 		return fmt.Errorf("app not found error")
 	}
-	if apps.Apps[appId].creator != id {
+	if apps.Apps[appId].Creator != id {
 		return fmt.Errorf("not your app error")
 	}
 	delete(apps.Apps, appId)
@@ -206,10 +206,10 @@ func LoadAllApps(id string) ([]*pb.AppInfo, error) {
 	var res []*pb.AppInfo
 	for _, val := range apps.Apps {
 		res = append(res, &pb.AppInfo{
-			Title:    val.title,
-			Describe: val.describe,
-			Prompt:   val.prompt,
-			Id:       val.id,
+			Title:    val.Title,
+			Describe: val.Describe,
+			Prompt:   val.Prompt,
+			Id:       val.Id,
 		})
 	}
 	return res, nil
