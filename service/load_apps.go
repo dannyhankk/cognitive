@@ -3,6 +3,7 @@ package service
 import (
 	"context"
 	pb "github.com/dannyhankk/cognitive/proto"
+	"github.com/dannyhankk/cognitive/util"
 )
 
 type LoadApps interface {
@@ -19,7 +20,16 @@ func NewMyLoadApps() LoadApps {
 func (c *MyLoadApps) AppLoad(ctx context.Context,
 	in *pb.LoadAppsRequest) (*pb.LoadAppsResponse, error) {
 	res := &pb.LoadAppsResponse{}
-
+	if in.Head == nil || len(in.Head.Id) == 0 {
+		util.Logger.Errorf("load apps id empty")
+		return c.doResponseExp(-1, "id empty", res)
+	}
+	data, err := LoadAllApps(in.Head.Id)
+	if err != nil {
+		util.Logger.Errorf("load all apps error, %s", err.Error())
+		return c.doResponseExp(-1, "load all app failed", res)
+	}
+	res.
 	return c.doResponse(res)
 }
 

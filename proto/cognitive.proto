@@ -123,5 +123,6 @@ message LoadAppsRequest {
 }
 
 message LoadAppsResponse {
-  RspHead head = 2;
+  RspHead head = 1;
+  repeated AppInfo apps = 2;
 }
