@@ -4,20 +4,37 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/dannyhankk/cognitive/db"
+	pb "github.com/dannyhankk/cognitive/proto"
 	"github.com/dannyhankk/cognitive/util"
 	"github.com/go-redis/redis"
+	"sync"
 	"time"
 )
 
 const (
 	DaySeconds  = 24 * 3600
 	HourSeconds = 3600
+
+	DefaultAppsKey = "UserApp"
 )
+
+var appsLock sync.Mutex
 
 type userGenInfo struct {
 	CurGenNum    int8  `json:"cur_gen_num"`
 	FirstGenTime int64 `json:"first_gen_time"`
 	ResetGenTime int64 `json:"reset_gen_time,omitempty"`
+}
+
+type storeAppInfo struct {
+	title    string `json:"title"`
+	describe string `json:"describe"`
+	prompt   string `json:"prompt"`
+	id       string `json:"id"`
+	creator  string `json:"creator"`
+}
+type AppStore struct {
+	Apps map[string]*storeAppInfo `json:"apps"`
 }
 
 func GenVideoFileName(id string) string {
@@ -103,4 +120,97 @@ func ResetVoiceGen(id string) error {
 		return fmt.Errorf("reset user gen failed, %s", err.Error())
 	}
 	return nil
+}
+
+func AddApps(id string, app *pb.AppInfo) error {
+	appsLock.Lock()
+	defer appsLock.Unlock()
+	appString, err := db.Get(DefaultAppsKey)
+	if err != nil && err != redis.Nil {
+		return fmt.Errorf("load user apps error, %s", err)
+	}
+	apps := &AppStore{}
+	if err == redis.Nil {
+		apps.Apps = make(map[string]*storeAppInfo)
+	} else {
+		err = json.Unmarshal([]byte(appString), &apps)
+		if err != nil {
+			return fmt.Errorf("unmarshal user apps error, %s", err.Error())
+		}
+	}
+	appId := util.GenerateID(id)
+	newApp := &storeAppInfo{
+		title:    app.Title,
+		describe: app.Describe,
+		prompt:   app.Prompt,
+		id:       appId,
+		creator:  id,
+	}
+	apps.Apps[appId] = newApp
+	storeString, err := json.Marshal(apps)
+	if err != nil {
+		return fmt.Errorf("marshal store app error, %s", err.Error())
+	}
+	err = db.Save(DefaultAppsKey, string(storeString))
+	if err != nil {
+		return fmt.Errorf("store app error")
+	}
+	return nil
+}
+func DeleteApps(id string, appId string) error {
+	appsLock.Lock()
+	defer appsLock.Unlock()
+	appString, err := db.Get(DefaultAppsKey)
+	if err != nil && err != redis.Nil {
+		return fmt.Errorf("load user apps error, %s", err)
+	}
+	if err == redis.Nil {
+		return fmt.Errorf("apps empty")
+	}
+	apps := &AppStore{}
+	err = json.Unmarshal([]byte(appString), &apps)
+	if err != nil {
+		return fmt.Errorf("unmarshal user apps error, %s", err.Error())
+	}
+	if _, ok := apps.Apps[appId]; !ok {
+		return fmt.Errorf("app not found error")
+	}
+	if apps.Apps[appId].creator != id {
+		return fmt.Errorf("not your app error")
+	}
+	delete(apps.Apps, appId)
+	storeString, err := json.Marshal(apps)
+	if err != nil {
+		return fmt.Errorf("marshal store app error, %s", err.Error())
+	}
+	err = db.Save(DefaultAppsKey, string(storeString))
+	if err != nil {
+		return fmt.Errorf("store app error")
+	}
+	return nil
+}
+
+func LoadAllApps(id string) ([]*pb.AppInfo, error) {
+	appString, err := db.Get(DefaultAppsKey)
+	if err != nil && err != redis.Nil {
+		return nil, fmt.Errorf("load user apps error, %s", err)
+	}
+	if err == redis.Nil {
+		return nil, fmt.Errorf("apps empty")
+	}
+	apps := &AppStore{}
+	err = json.Unmarshal([]byte(appString), &apps)
+	if err != nil {
+		return nil, fmt.Errorf("unmarshal user apps error, %s", err.Error())
+	}
+	var res []*pb.AppInfo
+	for _, val := range apps.Apps {
+		res = append(res, &pb.AppInfo{
+			Title:    val.title,
+			Describe: val.describe,
+			Prompt:   val.prompt,
+			Id:       val.id,
+		})
+	}
+	return res, nil
 }

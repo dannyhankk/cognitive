@@ -24,15 +24,26 @@ func (c *MyAddApp) Add(ctx context.Context,
 		util.Logger.Errorf("add app id empty")
 		return c.doResponseExp(-1, "id empty", res)
 	}
-
+	err := AddApps(in.Head.Id, in.App)
+	if err != nil {
+		util.Logger.Errorf("add apps error, %s", err.Error())
+		return c.doResponseExp(-1, "add app error", res)
+	}
 	return c.doResponse(res)
 }
 
 func (c *MyAddApp) doResponse(res *pb.AddAppResponse) (*pb.AddAppResponse, error) {
-
+	res.Head = &pb.RspHead{
+		Code: 0,
+		Msg:  "success",
+	}
 	return res, nil
 }
 
 func (c *MyAddApp) doResponseExp(code int32, msg string, res *pb.AddAppResponse) (*pb.AddAppResponse, error) {
+	res.Head = &pb.RspHead{
+		Code: code,
+		Msg:  msg,
+	}
 	return res, nil
 }

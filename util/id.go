@@ -1,12 +1,15 @@
 package util
 
-import "sync"
+import (
+	"fmt"
+	"sync"
+	"time"
+)
 
 var (
 	IdLock sync.Mutex
 )
 
-func GenID() string {
-
-	return ""
+func GenerateID(id string) string {
+	return fmt.Sprintf("%s_%d", id, time.Now().UnixMilli())
 }

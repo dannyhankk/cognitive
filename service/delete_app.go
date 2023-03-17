@@ -3,6 +3,7 @@ package service
 import (
 	"context"
 	pb "github.com/dannyhankk/cognitive/proto"
+	"github.com/dannyhankk/cognitive/util"
 )
 
 type DeleteApp interface {
@@ -19,7 +20,11 @@ func NewMyDeleteApp() DeleteApp {
 func (c *MyDeleteApp) Delete(ctx context.Context,
 	in *pb.DeleteAppRequest) (*pb.DeleteAppResponse, error) {
 	res := &pb.DeleteAppResponse{}
-
+	if in.Head == nil || len(in.Head.Id) == 0 {
+		util.Logger.Errorf("add app id empty")
+		return c.doResponseExp(-1, "id empty", res)
+	}
+	err := DeleteApps(in.Head.Id, in.Id)
 	return c.doResponse(res)
 }
 
