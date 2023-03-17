@@ -11,8 +11,10 @@ import (
 )
 
 const (
-	default_path = "/http_default/video"
-	http_default = "https://m.dannyhkk.cn/video"
+	default_path       = "/http_default/video"
+	http_voice_default = "https://m.dannyhkk.cn/video"
+	default_icon_path  = "/appicons"
+	http_default       = "https://m.dannyhkk.cn"
 )
 
 type Chat2Speech interface {

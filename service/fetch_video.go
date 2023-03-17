@@ -51,7 +51,7 @@ func (c *MyFetchVideos) Fetch(ctx context.Context,
 		fileNameWithOutEx := file[0 : len(file)-4]
 		title, _ := db.Get(fileNameWithOutEx)
 		res.VideoList = append(res.VideoList, &pb.Video{
-			Src:    http_default + "/" + in.Head.Id + "/" + file,
+			Src:    http_voice_default + "/" + in.Head.Id + "/" + file,
 			Author: "Kevin",
 			Title:  title,
 		})
