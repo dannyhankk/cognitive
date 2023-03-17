@@ -11,8 +11,10 @@ service Text2Speech {
   rpc FetchVoiceText(FetchVoiceTextRequest) returns (FetchVoiceTextResponse){}
 
   rpc LoadIcons(LoadIconsRequest) returns(LoadIconsResponse) {}
-  rpc AddIcons(AddIconsRequest) returns (AddIconsResponse) {}
-  rpc DeleteIcons(DeleteIconsRequest) returns (DeleteIconsResponse) {}
+
+  rpc AddApp(AddAppRequest) returns (AddAppResponse) {}
+  rpc DeleteApp(DeleteAppRequest) returns (DeleteAppResponse) {}
+  rpc LoadApps(LoadAppsRequest) returns (LoadAppsResponse) {}
 }
 
 message ReqHead {
@@ -97,20 +99,28 @@ message AppInfo {
   int32  id = 4;
 }
 
-message AddIconsRequest{
+message AddAppRequest{
   ReqHead head = 1;
   AppInfo app = 2;
 }
 
-message AddIconsResponse {
+message AddAppResponse {
   RspHead head = 1;
 }
 
-message DeleteIconsRequest {
+message DeleteAppRequest {
   ReqHead head = 1;
   int64  id = 5;
 }
 
-message DeleteIconsResponse {
+message DeleteAppResponse {
   RspHead head = 1;
+}
+
+message LoadAppsRequest {
+  ReqHead head = 1;
+}
+
+message LoadAppsResponse {
+  RspHead head = 2;
 }

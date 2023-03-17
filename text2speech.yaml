@@ -14,3 +14,15 @@ http:
     - selector: cognitive.Text2Speech.FetchVoiceText
       post: /cognitive/fetchtext
       body: "*"
+    - selector: cognitive.Text2Speech.LoadIcons
+      post: /cognitive/loadicons
+      body: "*"
+    - selector: cognitive.Text2Speech.AddApp
+      post: /cognitive/addapp
+      body: "*"
+    - selector: cognitive.Text2Speech.DeleteApp
+      post: /cognitive/deleteapp
+      body: "*"
+    - selector: cognitive.Text2Speech.LoadApps
+      post: /cognitive/loadapps
+      body: "*"
