@@ -11,7 +11,8 @@ import (
 )
 
 const (
-	default_path       = "/http_default/video"
+	default_path       = "/http_default"
+	default_voice_path = "/http_default/video"
 	http_voice_default = "https://m.dannyhkk.cn/video"
 	default_icon_path  = "/appicons"
 	http_default       = "https://m.dannyhkk.cn"
@@ -45,7 +46,7 @@ func (c *MyChat2Speech) TransSpeech(ctx context.Context, in *pb.ChatRequest) (
 		return c.doResponseExp(-2, "user out limit", res)
 	}
 
-	fileDir := default_path + "/" + in.Head.Id
+	fileDir := default_voice_path + "/" + in.Head.Id
 	if _, err := os.Stat(fileDir); err != nil && os.IsNotExist(err) {
 		err = os.Mkdir(fileDir, os.ModePerm)
 		util.Logger.Infof("make dir : %v", err)
