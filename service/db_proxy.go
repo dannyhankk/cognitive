@@ -31,6 +31,7 @@ type storeAppInfo struct {
 	Describe string `json:"describe"`
 	Prompt   string `json:"prompt"`
 	Id       string `json:"id"`
+	Icon     string `json:"icon"`
 	Creator  string `json:"creator"`
 }
 type AppStore struct {
@@ -144,6 +145,7 @@ func AddApps(id string, app *pb.AppInfo) error {
 		Describe: app.Describe,
 		Prompt:   app.Prompt,
 		Id:       appId,
+		Icon:     app.Icon,
 		Creator:  id,
 	}
 	apps.Apps[appId] = newApp
@@ -210,6 +212,7 @@ func LoadAllApps(id string) ([]*pb.AppInfo, error) {
 			Describe: val.Describe,
 			Prompt:   val.Prompt,
 			Id:       val.Id,
+			Icon:     val.Icon,
 		})
 	}
 	return res, nil
