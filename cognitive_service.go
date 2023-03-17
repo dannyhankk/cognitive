@@ -33,3 +33,10 @@ func (s *MyServer) FetchVoiceText(
 	handler := service.NewMyFetchVoiceText()
 	return handler.FetchText(ctx, in)
 }
+
+func (s *MyServer) LoadIcons(
+	ctx context.Context, in *pb.LoadIconsRequest) (
+	out *pb.LoadIconsResponse, err error) {
+	handler := service.NewMyLoadIcon()
+	return handler.Load(ctx, in)
+}
