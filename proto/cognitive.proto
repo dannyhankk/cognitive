@@ -96,7 +96,7 @@ message AppInfo {
   string title = 1;
   string describe = 2;
   string prompt = 3;
-  int32  id = 4;
+  string  id = 4;
 }
 
 message AddAppRequest{
