@@ -26,6 +26,10 @@ type Text2SpeechClient interface {
 	FetchVideoList(ctx context.Context, in *FetchVideoRequest, opts ...grpc.CallOption) (*FetchVideoResponse, error)
 	ResetGenVoice(ctx context.Context, in *ResetVoiceGenRequest, opts ...grpc.CallOption) (*ResetVoiceGenResponse, error)
 	FetchVoiceText(ctx context.Context, in *FetchVoiceTextRequest, opts ...grpc.CallOption) (*FetchVoiceTextResponse, error)
+	LoadIcons(ctx context.Context, in *LoadIconsRequest, opts ...grpc.CallOption) (*LoadIconsResponse, error)
+	AddApp(ctx context.Context, in *AddAppRequest, opts ...grpc.CallOption) (*AddAppResponse, error)
+	DeleteApp(ctx context.Context, in *DeleteAppRequest, opts ...grpc.CallOption) (*DeleteAppResponse, error)
+	LoadApps(ctx context.Context, in *LoadAppsRequest, opts ...grpc.CallOption) (*LoadAppsResponse, error)
 }
 
 type text2SpeechClient struct {
@@ -72,6 +76,42 @@ func (c *text2SpeechClient) FetchVoiceText(ctx context.Context, in *FetchVoiceTe
 	return out, nil
 }
 
+func (c *text2SpeechClient) LoadIcons(ctx context.Context, in *LoadIconsRequest, opts ...grpc.CallOption) (*LoadIconsResponse, error) {
+	out := new(LoadIconsResponse)
+	err := c.cc.Invoke(ctx, "/cognitive.Text2Speech/LoadIcons", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *text2SpeechClient) AddApp(ctx context.Context, in *AddAppRequest, opts ...grpc.CallOption) (*AddAppResponse, error) {
+	out := new(AddAppResponse)
+	err := c.cc.Invoke(ctx, "/cognitive.Text2Speech/AddApp", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *text2SpeechClient) DeleteApp(ctx context.Context, in *DeleteAppRequest, opts ...grpc.CallOption) (*DeleteAppResponse, error) {
+	out := new(DeleteAppResponse)
+	err := c.cc.Invoke(ctx, "/cognitive.Text2Speech/DeleteApp", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *text2SpeechClient) LoadApps(ctx context.Context, in *LoadAppsRequest, opts ...grpc.CallOption) (*LoadAppsResponse, error) {
+	out := new(LoadAppsResponse)
+	err := c.cc.Invoke(ctx, "/cognitive.Text2Speech/LoadApps", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // Text2SpeechServer is the server API for Text2Speech service.
 // All implementations must embed UnimplementedText2SpeechServer
 // for forward compatibility
@@ -80,6 +120,10 @@ type Text2SpeechServer interface {
 	FetchVideoList(context.Context, *FetchVideoRequest) (*FetchVideoResponse, error)
 	ResetGenVoice(context.Context, *ResetVoiceGenRequest) (*ResetVoiceGenResponse, error)
 	FetchVoiceText(context.Context, *FetchVoiceTextRequest) (*FetchVoiceTextResponse, error)
+	LoadIcons(context.Context, *LoadIconsRequest) (*LoadIconsResponse, error)
+	AddApp(context.Context, *AddAppRequest) (*AddAppResponse, error)
+	DeleteApp(context.Context, *DeleteAppRequest) (*DeleteAppResponse, error)
+	LoadApps(context.Context, *LoadAppsRequest) (*LoadAppsResponse, error)
 	mustEmbedUnimplementedText2SpeechServer()
 }
 
@@ -98,6 +142,18 @@ func (UnimplementedText2SpeechServer) ResetGenVoice(context.Context, *ResetVoice
 }
 func (UnimplementedText2SpeechServer) FetchVoiceText(context.Context, *FetchVoiceTextRequest) (*FetchVoiceTextResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method FetchVoiceText not implemented")
+}
+func (UnimplementedText2SpeechServer) LoadIcons(context.Context, *LoadIconsRequest) (*LoadIconsResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method LoadIcons not implemented")
+}
+func (UnimplementedText2SpeechServer) AddApp(context.Context, *AddAppRequest) (*AddAppResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method AddApp not implemented")
+}
+func (UnimplementedText2SpeechServer) DeleteApp(context.Context, *DeleteAppRequest) (*DeleteAppResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method DeleteApp not implemented")
+}
+func (UnimplementedText2SpeechServer) LoadApps(context.Context, *LoadAppsRequest) (*LoadAppsResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method LoadApps not implemented")
 }
 func (UnimplementedText2SpeechServer) mustEmbedUnimplementedText2SpeechServer() {}
 
@@ -184,6 +240,78 @@ func _Text2Speech_FetchVoiceText_Handler(srv interface{}, ctx context.Context, d
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Text2Speech_LoadIcons_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(LoadIconsRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(Text2SpeechServer).LoadIcons(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/cognitive.Text2Speech/LoadIcons",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(Text2SpeechServer).LoadIcons(ctx, req.(*LoadIconsRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Text2Speech_AddApp_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(AddAppRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(Text2SpeechServer).AddApp(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/cognitive.Text2Speech/AddApp",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(Text2SpeechServer).AddApp(ctx, req.(*AddAppRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Text2Speech_DeleteApp_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(DeleteAppRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(Text2SpeechServer).DeleteApp(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/cognitive.Text2Speech/DeleteApp",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(Text2SpeechServer).DeleteApp(ctx, req.(*DeleteAppRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Text2Speech_LoadApps_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(LoadAppsRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(Text2SpeechServer).LoadApps(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/cognitive.Text2Speech/LoadApps",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(Text2SpeechServer).LoadApps(ctx, req.(*LoadAppsRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // Text2Speech_ServiceDesc is the grpc.ServiceDesc for Text2Speech service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -206,6 +334,22 @@ var Text2Speech_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "FetchVoiceText",
 			Handler:    _Text2Speech_FetchVoiceText_Handler,
+		},
+		{
+			MethodName: "LoadIcons",
+			Handler:    _Text2Speech_LoadIcons_Handler,
+		},
+		{
+			MethodName: "AddApp",
+			Handler:    _Text2Speech_AddApp_Handler,
+		},
+		{
+			MethodName: "DeleteApp",
+			Handler:    _Text2Speech_DeleteApp_Handler,
+		},
+		{
+			MethodName: "LoadApps",
+			Handler:    _Text2Speech_LoadApps_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
