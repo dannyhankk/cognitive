@@ -24,6 +24,10 @@ func (c *MyAddApp) Add(ctx context.Context,
 		util.Logger.Errorf("add app id empty")
 		return c.doResponseExp(-1, "id empty", res)
 	}
+	if in.App == nil {
+		util.Logger.Errorf("add app error, app empty")
+		return c.doResponseExp(-1, "app empty", res)
+	}
 	err := AddApps(in.Head.Id, in.App)
 	if err != nil {
 		util.Logger.Errorf("add apps error, %s", err.Error())
