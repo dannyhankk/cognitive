@@ -9,6 +9,10 @@ service Text2Speech {
   rpc FetchVideoList(FetchVideoRequest) returns(FetchVideoResponse){}
   rpc ResetGenVoice(ResetVoiceGenRequest) returns(ResetVoiceGenResponse){}
   rpc FetchVoiceText(FetchVoiceTextRequest) returns (FetchVoiceTextResponse){}
+
+  rpc LoadIcons(LoadIconsRequest) returns(LoadIconsResponse) {}
+  rpc AddIcons(AddIconsRequest) returns (AddIconsResponse) {}
+  rpc DeleteIcons(DeleteIconsRequest) returns (DeleteIconsResponse) {}
 }
 
 message ReqHead {
@@ -75,4 +79,38 @@ message FetchVoiceTextRequest {
 message FetchVoiceTextResponse {
   RspHead head = 1;
   string text = 2;
+}
+
+message LoadIconsRequest {
+  ReqHead head = 1;
+}
+
+message LoadIconsResponse {
+  RspHead head = 1;
+  repeated string icons = 2;
+}
+
+message AppInfo {
+  string title = 1;
+  string describe = 2;
+  string prompt = 3;
+  int32  id = 4;
+}
+
+message AddIconsRequest{
+  ReqHead head = 1;
+  AppInfo app = 2;
+}
+
+message AddIconsResponse {
+  RspHead head = 1;
+}
+
+message DeleteIconsRequest {
+  ReqHead head = 1;
+  int64  id = 5;
+}
+
+message DeleteIconsResponse {
+  RspHead head = 1;
 }
