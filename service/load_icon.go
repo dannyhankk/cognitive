@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	pb "github.com/dannyhankk/cognitive/proto"
+	"github.com/dannyhankk/cognitive/util"
 	"os"
 	"path/filepath"
 	"strings"
@@ -43,9 +44,11 @@ func (c *MyLoadIcon) Load(ctx context.Context,
 		return nil
 	})
 	if err != nil {
+		util.Logger.Errorf("scan failed, %s", err.Error())
 		return c.doResponseExp(-1, fmt.Sprintf("scan icon path error"), res)
 	}
-	res.Icons = append(res.Icons, icons...)
+	res.Icons = icons
+	util.Logger.Infof("icons: %+v", res)
 	return c.doResponse(res)
 }
 
