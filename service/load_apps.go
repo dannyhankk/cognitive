@@ -29,16 +29,22 @@ func (c *MyLoadApps) AppLoad(ctx context.Context,
 		util.Logger.Errorf("load all apps error, %s", err.Error())
 		return c.doResponseExp(-1, "load all app failed", res)
 	}
-	res.
+	res.Apps = data
 	return c.doResponse(res)
 }
 
 func (c *MyLoadApps) doResponse(res *pb.LoadAppsResponse) (*pb.LoadAppsResponse, error) {
-
+	res.Head = &pb.RspHead{
+		Code: 0,
+		Msg:  "success",
+	}
 	return res, nil
 }
 
 func (c *MyLoadApps) doResponseExp(code int32, msg string, res *pb.LoadAppsResponse) (*pb.LoadAppsResponse, error) {
-
+	res.Head = &pb.RspHead{
+		Code: code,
+		Msg:  msg,
+	}
 	return res, nil
 }

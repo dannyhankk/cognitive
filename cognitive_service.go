@@ -40,3 +40,24 @@ func (s *MyServer) LoadIcons(
 	handler := service.NewMyLoadIcon()
 	return handler.Load(ctx, in)
 }
+
+func (s *MyServer) AddApp(
+	ctx context.Context, in *pb.AddAppRequest) (
+	out *pb.AddAppResponse, err error) {
+	handler := service.NewMyAddApp()
+	return handler.Add(ctx, in)
+}
+
+func (s *MyServer) DeleteApp(
+	ctx context.Context, in *pb.DeleteAppRequest) (
+	out *pb.DeleteAppResponse, err error) {
+	handler := service.NewMyDeleteApp()
+	return handler.Delete(ctx, in)
+}
+
+func (s *MyServer) LoadApps(
+	ctx context.Context, in *pb.LoadAppsRequest) (
+	out *pb.LoadAppsResponse, err error) {
+	handler := service.NewMyLoadApps()
+	return handler.AppLoad(ctx, in)
+}
