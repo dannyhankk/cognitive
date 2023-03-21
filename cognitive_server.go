@@ -79,5 +79,8 @@ func initAll() error {
 	if err := db.InitRedis(); err != nil {
 		return fmt.Errorf("init redis failed, %s", err.Error())
 	}
+	if err := util.InitTicker(); err != nil {
+		return fmt.Errorf("init ticker error, %s", err.Error())
+	}
 	return nil
 }

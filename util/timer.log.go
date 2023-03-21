@@ -10,16 +10,19 @@ var (
 
 func InitTicker() error {
 	Ticker.Reset(time.Second * 1800)
-	ExecuteTask()
-	for {
-		select {
-		case <-Ticker.C:
-			if !check2am() {
-				continue
+	go func() {
+		ExecuteTask()
+		for {
+			select {
+			case <-Ticker.C:
+				if !check2am() {
+					continue
+				}
+				ExecuteTask()
 			}
-			ExecuteTask()
 		}
-	}
+	}()
+	return nil
 }
 
 func check2am() bool {
