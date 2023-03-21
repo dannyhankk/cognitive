@@ -55,7 +55,7 @@ func LoadReportLog(click *AppClick) (*AppClick, error) {
 			continue
 		}
 		reportSt := &AppReport{}
-		err := json.Unmarshal([]byte(strs[0]), reportSt)
+		err := json.Unmarshal([]byte(strs[1]), reportSt)
 		if err != nil {
 			Logger.Errorf("wrong log format, %s", err.Error())
 			continue
