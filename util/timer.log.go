@@ -10,9 +10,13 @@ var (
 
 func InitTicker() error {
 	Ticker.Reset(time.Second * 1800)
+	ExecuteTask()
 	for {
 		select {
 		case <-Ticker.C:
+			if !check2am() {
+				continue
+			}
 			ExecuteTask()
 		}
 	}
@@ -30,9 +34,6 @@ func check2am() bool {
 }
 
 func ExecuteTask() {
-	if !check2am() {
-		return
-	}
 	click, err := LoadUserClick()
 	if err != nil {
 		Logger.Errorf("load user click error, %s", err.Error())
