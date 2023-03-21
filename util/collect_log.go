@@ -27,7 +27,7 @@ type AppReport struct {
 func LoadReportLog(click *AppClick) (*AppClick, error) {
 	yesterday := time.Unix(time.Now().Unix()-24*3600, 0).Format("2006/01/02")
 	Logger.Infof("read day: %s", yesterday)
-	file, err := os.OpenFile("/root/working/app_report.log", os.O_WRONLY, 0644)
+	file, err := os.OpenFile("/root/working/app_report.log", os.O_RDONLY, 0644)
 	if err != nil {
 		return nil, fmt.Errorf("open log file error, %s", err.Error())
 	}
