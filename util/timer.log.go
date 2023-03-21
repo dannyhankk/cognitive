@@ -42,6 +42,11 @@ func ExecuteTask() {
 		Logger.Errorf("load user click error, %s", err.Error())
 		return
 	}
+	if click == nil {
+		click = &AppClick{
+			Click: make(map[string]int64),
+		}
+	}
 	afterClick, err := LoadReportLog(click)
 	if err != nil {
 		Logger.Errorf("load report log error, %s", err.Error())

@@ -66,7 +66,7 @@ func LoadUserClick() (*AppClick, error) {
 		return nil, fmt.Errorf("load user apps error, %s", err)
 	}
 	if err == redis.Nil {
-		return nil, fmt.Errorf("apps click empty")
+		return nil, nil
 	}
 	click := &AppClick{}
 	err = json.Unmarshal([]byte(appClick), &click)
