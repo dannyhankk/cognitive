@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"github.com/dannyhankk/cognitive/db"
 	"github.com/go-redis/redis"
+	log "github.com/sirupsen/logrus"
 	"io"
 	"os"
 	"strings"
@@ -37,15 +38,18 @@ func LoadReportLog(click *AppClick) (*AppClick, error) {
 		data, rErr := r.ReadBytes('\n')
 		if rErr == io.EOF {
 			Logger.Infof("read end")
+			break
 		}
 		if rErr != nil {
 			Logger.Errorf("read error, %s", rErr.Error())
 			break
 		}
 		if !strings.Contains(string(data), yesterday) {
+			log.Errorf("not tody, %s", string(data))
 			continue
 		}
 		strs := strings.Split(string(data), " ")
+		Logger.Errorf("%+v", strs)
 		if len(strs) < 2 {
 			Logger.Errorf("wrong log format, %s", string(data))
 			continue
@@ -53,6 +57,7 @@ func LoadReportLog(click *AppClick) (*AppClick, error) {
 		reportSt := &AppReport{}
 		err := json.Unmarshal([]byte(strs[0]), reportSt)
 		if err != nil {
+			Logger.Errorf("wrong log format, %s", err.Error())
 			continue
 		}
 		if _, ok := tmpClick.Click[reportSt.Id]; ok {
