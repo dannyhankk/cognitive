@@ -7,6 +7,7 @@ import (
 	pb "github.com/dannyhankk/cognitive/proto"
 	"github.com/dannyhankk/cognitive/util"
 	"github.com/go-redis/redis"
+	"sort"
 	"sync"
 	"time"
 )
@@ -36,6 +37,11 @@ type storeAppInfo struct {
 }
 type AppStore struct {
 	Apps map[string]*storeAppInfo `json:"apps"`
+}
+
+type ForSorted struct {
+	Id    string
+	Click int64
 }
 
 func GenVideoFileName(id string) string {
@@ -205,8 +211,21 @@ func LoadAllApps(id string) ([]*pb.AppInfo, error) {
 	if err != nil {
 		return nil, fmt.Errorf("unmarshal user apps error, %s", err.Error())
 	}
+
 	var res []*pb.AppInfo
-	for _, val := range apps.Apps {
+	userClick, err := util.LoadUserClick()
+	if err != nil {
+		util.Logger.Errorf("load user click error, %s, unsorted", err.Error())
+		res = getUnSortedAppInfo(apps.Apps)
+	} else {
+		res = getSortedAppInfo(apps.Apps, userClick)
+	}
+	return res, nil
+}
+
+func getUnSortedAppInfo(apps map[string]*storeAppInfo) []*pb.AppInfo {
+	var res []*pb.AppInfo
+	for _, val := range apps {
 		res = append(res, &pb.AppInfo{
 			Title:    val.Title,
 			Describe: val.Describe,
@@ -215,5 +234,36 @@ func LoadAllApps(id string) ([]*pb.AppInfo, error) {
 			Icon:     val.Icon,
 		})
 	}
-	return res, nil
+	return res
+}
+func getSortedAppInfo(apps map[string]*storeAppInfo, click *util.AppClick) []*pb.AppInfo {
+	var filterId []*ForSorted
+	for _, app := range apps {
+		if _, ok := click.Click[app.Id]; !ok {
+			filterId = append(filterId, &ForSorted{
+				Id:    app.Id,
+				Click: 0,
+			})
+			continue
+		}
+		filterId = append(filterId, &ForSorted{
+			Id:    app.Id,
+			Click: click.Click[app.Id],
+		})
+	}
+	sort.SliceStable(filterId, func(i, j int) bool {
+		return filterId[i].Click > filterId[j].Click
+	})
+	var res []*pb.AppInfo
+	for _, id := range filterId {
+		val := apps[id.Id]
+		res = append(res, &pb.AppInfo{
+			Title:    val.Title,
+			Describe: val.Describe,
+			Prompt:   val.Prompt,
+			Id:       val.Id,
+			Icon:     val.Icon,
+		})
+	}
+	return res
 }
