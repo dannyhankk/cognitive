@@ -25,7 +25,8 @@ type AppReport struct {
 }
 
 func LoadReportLog(click *AppClick) (*AppClick, error) {
-	currentDay := time.Unix(time.Now().Unix()-24*3600, 0).Format("2006/01/02")
+	yesterday := time.Unix(time.Now().Unix()-24*3600, 0).Format("2006/01/02")
+	Logger.Infof("read day: %s", yesterday)
 	file, err := os.OpenFile("/root/working/app_report.log", os.O_WRONLY, 0644)
 	if err != nil {
 		return nil, fmt.Errorf("open log file error, %s", err.Error())
@@ -34,29 +35,34 @@ func LoadReportLog(click *AppClick) (*AppClick, error) {
 	r := bufio.NewReader(file)
 	for {
 		data, rErr := r.ReadBytes('\n')
-		if rErr != nil && rErr == io.EOF {
-			break
+		if rErr == io.EOF {
+			Logger.Infof("read end")
 		}
 		if rErr != nil {
+			Logger.Errorf("read error, %s", rErr.Error())
+			break
+		}
+		if !strings.Contains(string(data), yesterday) {
 			continue
 		}
-		if strings.Contains(string(data), currentDay) {
-			strs := strings.Split(string(data), " ")
-			if len(strs) < 2 {
-				continue
-			}
-			reportSt := &AppReport{}
-			err := json.Unmarshal([]byte(strs[0]), reportSt)
-			if err != nil {
-				continue
-			}
-			if _, ok := tmpClick.Click[reportSt.Id]; ok {
-				tmpClick.Click[reportSt.Id] += 1
-				continue
-			}
-			tmpClick.Click[reportSt.Id] = 1
+		strs := strings.Split(string(data), " ")
+		if len(strs) < 2 {
+			Logger.Errorf("wrong log format, %s", string(data))
+			continue
 		}
+		reportSt := &AppReport{}
+		err := json.Unmarshal([]byte(strs[0]), reportSt)
+		if err != nil {
+			continue
+		}
+		if _, ok := tmpClick.Click[reportSt.Id]; ok {
+			tmpClick.Click[reportSt.Id] += 1
+			continue
+		}
+		tmpClick.Click[reportSt.Id] = 1
+
 	}
+	Logger.Infof("click: %+v", tmpClick)
 	return tmpClick, nil
 }
 
