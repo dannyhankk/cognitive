@@ -5,11 +5,11 @@ import (
 )
 
 var (
-	Ticker time.Ticker
+	Ticker *time.Ticker
 )
 
 func InitTicker() error {
-	Ticker.Reset(time.Second * 1800)
+	Ticker = time.NewTicker(time.Second * 1800)
 	go func() {
 		ExecuteTask()
 		for {
