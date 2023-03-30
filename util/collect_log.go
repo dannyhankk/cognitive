@@ -6,7 +6,6 @@ import (
 	"fmt"
 	"github.com/dannyhankk/cognitive/db"
 	"github.com/go-redis/redis"
-	log "github.com/sirupsen/logrus"
 	"io"
 	"os"
 	"strings"
@@ -45,7 +44,6 @@ func LoadReportLog(click *AppClick) (*AppClick, error) {
 			break
 		}
 		if !strings.Contains(string(data), yesterday) {
-			log.Errorf("not tody, %s", string(data))
 			continue
 		}
 		strs := strings.Split(string(data), " ")

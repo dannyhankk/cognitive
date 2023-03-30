@@ -20,6 +20,7 @@ type ConfigRoot struct {
 	RpcPort       int16  `mapstructure:"RpcPort"`
 	HttpPort      int16  `mapstructure:"HttpPort"`
 	VoiceGenLimit int8   `mapstructure:"VoiceGenLimit"`
+	SuperAdmin    string `mapstructure:"AdminId"`
 }
 
 func InitConfig(configFile string) error {

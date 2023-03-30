@@ -183,7 +183,7 @@ func DeleteApps(id string, appId string) error {
 	if _, ok := apps.Apps[appId]; !ok {
 		return fmt.Errorf("app not found error")
 	}
-	if apps.Apps[appId].Creator != id {
+	if apps.Apps[appId].Creator != id && id != util.RootConfig.SuperAdmin {
 		return fmt.Errorf("not your app error")
 	}
 	delete(apps.Apps, appId)
